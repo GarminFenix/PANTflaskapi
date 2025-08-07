@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 import openrouteservice
-from models.site import Site
-from models.pollution_reading import PollutionReading
+import math
+
 from utils.pollution.aqi import compute_aqi
 from utils.routes.enrichment import enrich_route_with_pollution
 
@@ -12,7 +12,7 @@ def generate_route():
     """
     Generate a base route, then simulate 3 alternatives by inserting offset waypoints
     at ¼, ½, and ¾ of the base route. Each route is enriched with pollution data.
-    The cleanest route is returned.
+    The cleanest route is returned as a GEOJson
     """
     data = request.get_json()
     required_keys = {'start', 'end', 'mode', 'pollutant'}
@@ -81,6 +81,17 @@ def generate_route():
     # Step 5: Select cleanest route
     best_route = min(enriched_routes, key=average_pollution_score)
     avg_score = average_pollution_score(best_route)
-    best_route['features'][0]['properties']['average_pollution_score'] = round(avg_score, 2)
+
+    # Prevent an infinite being returned
+    if math.isinf(avg_score) or math.isnan(avg_score):
+        avg_score_json = None
+    else:
+        avg_score_json = round(avg_score, 2)
+
+    # debuggin
+    print('Pollution scores:', best_route['features'][0]['properties']['pollution_scores'])
+    print('Average pollution score:', avg_score_json)
+
+    best_route['features'][0]['properties']['average_pollution_score'] = avg_score_json
 
     return jsonify(best_route), 200

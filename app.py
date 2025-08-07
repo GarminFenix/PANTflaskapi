@@ -1,7 +1,8 @@
 from flask import Flask
 from extensions import db
 from routes.routing import routing_bp
-
+from layers.site_location import sites_bp
+from layers.heat_map import heatmap_bp
 """
 This file sets up the Flask application and SQLAlchemy database connection.
 """
@@ -14,6 +15,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 
-# Register the routing blueprint
+# Blueprints
 app.register_blueprint(routing_bp)
+app.register_blueprint(sites_bp)
+app.register_blueprint(heatmap_bp)
 
