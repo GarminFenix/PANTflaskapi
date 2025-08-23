@@ -1,8 +1,8 @@
 """
 Unit tests for the heatmap blueprint routes.
-
 This module tests the '/heatmap/latest_readings' endpoint to ensure it returns
 the expected data structure and status code.
+Author: Ross Cochrane
 """
 import sys
 import os
@@ -12,15 +12,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'
 
 from app import app
 import pytest
-
-
-"""
-Unit tests for the heatmap blueprint in the Flask API.
-
-This module verifies the functionality of the '/heatmap/latest_readings' endpoint,
-ensuring it returns the correct status code and data structure.
-"""
-
 import unittest
 from app import app
 

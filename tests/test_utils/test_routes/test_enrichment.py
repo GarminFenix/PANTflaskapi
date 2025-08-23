@@ -1,3 +1,8 @@
+"""
+Module to test enrichment logic.
+Author: Ross Cochrane
+"""
+
 from flask import Flask
 import unittest
 from unittest.mock import patch, MagicMock

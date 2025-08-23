@@ -12,6 +12,7 @@ from dotenv import load_dotenv
    
 """
 This file sets up the Flask application and SQLAlchemy database connection.
+Author: Ross Cochrane
 """
 
 load_dotenv()

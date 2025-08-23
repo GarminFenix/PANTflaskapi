@@ -2,6 +2,7 @@
 Provides a Flask Blueprint for generating and evaluating routes based on pollution data.
 Uses OpenRouteService to generate a base route and three alternatives by inserting offset waypoints.
 Each route is enriched with pollution metrics, and the cleanest route is returned as GeoJSON.
+Author: Ross Cochrane
 """
 
 from flask import Blueprint, request, jsonify

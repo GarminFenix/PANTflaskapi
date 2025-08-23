@@ -1,7 +1,7 @@
 """
 Utility functions for computing AQI (Air Quality Index) based on pollutant readings.
-
 Pollutants are normalised 0-10.0 based on simulated ranges.
+Author: Ross Cochrane
 """
 
 def normalise_co(co):

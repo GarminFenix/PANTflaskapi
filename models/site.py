@@ -1,5 +1,6 @@
 """
 Defines th site model.
+Author: Ross Cochrane
 """
 
 from extensions import db
