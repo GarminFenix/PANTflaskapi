@@ -35,13 +35,13 @@ Flutter Front End
 1. **Clone the repository**  
    ```bash
    git clone https://github.com/GarminFenix/PANTflaskapi.git
-   cd pollution-routing-flask
+   cd PANTflaskapi
    ```
 
 2. **Create and activate a virtual environment**  
    ```bash
    python -m venv venv
-   source venv/bin/activate      # macOS/Linux
+   
    venv\Scripts\activate         # Windows PowerShell
    ```
 

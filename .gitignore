@@ -19,3 +19,5 @@ __pycache__/
 # Ignore IDE-specific files (VS Code, JetBrains)
 .vscode/
 .idea/
+
+docs/build/
