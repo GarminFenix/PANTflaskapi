@@ -8,9 +8,13 @@ from extensions import db
 from routes.routing import routing_bp
 from layers.site_location import sites_bp
 from layers.heat_map import heatmap_bp
+from dotenv import load_dotenv
+   
 """
 This file sets up the Flask application and SQLAlchemy database connection.
 """
+
+load_dotenv()
 # Create the Flask application
 app = Flask(__name__)
 
