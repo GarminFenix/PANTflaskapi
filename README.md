@@ -1,139 +1,163 @@
-
 # Pollution Routing Flask API
 
-A Flask web service that provides  
-- live pollution data simulation and subscription  
-- pollution-aware routing via OpenRouteService  
-- site metadata and heatmap endpoints  
+A Flask web service powering the Pollution Avoidance Navigation Tool.  
+It exposes live pollution data, site metadata, and pollution-aware routing endpoints backed by OpenRouteService.
 
-This README guides setup, configuration, and usage.
+---
+
+## Features
+
+- Serve latest pollution readings per site (GeoJSON)  
+- Retrieve all monitoring site locations (GeoJSON)  
+- Generate and return the cleanest route enriched with pollution scores  
+- Modular Flask Blueprints for heatmap, sites, and routing  
 
 ---
 
 ## Prerequisites
 
 - Python 3.10+  
-- PostgreSQL with PostGIS extension  
-- An OpenRouteService API key  
-
-
----
-
-## Environment Configuration
-
-This project uses environment variables for sensitive configuration. You can set them **at runtime** in your shell before launching the Flask app.
-
-### PowerShell (Windows)
-
-```powershell
-$env:DATABASE_URL = "postgresql://postgres:Unsalted2025@localhost:5432/pollution_routing"
-$env:ORS_API_KEY = "your-ors-api-key-here"
-flask run
-```
-
-> These variables are loaded dynamically when the app starts. No `.env` file is required unless you prefer that method for local development.
-
-### Optional: Using a `.env` File
-
-If you'd rather not set variables manually each time, you can use a `.env` file and load it with `python-dotenv`:
-
-1. Install:
-   ```bash
-   pip install python-dotenv
-   ```
-
-2. Create `.env`:
-   ```
-   DATABASE_URL=postgresql://postgres:Unsalted2025@localhost:5432/pollution_routing
-   ORS_API_KEY=your-ors-api-key-here
-   ```
-
-3. Load it in your app:
-   ```python
-   from dotenv import load_dotenv
-   load_dotenv()
-   ```
+- PostgreSQL ≥ 13 with PostGIS enabled  
+- An OpenRouteService API key (sign up at https://openrouteservice.org/)  
 
 ---
 
 ## Installation
 
-```bash
-git clone <repo-url>
-cd flask-api
-python -m venv venv
-venv\Scripts\activate      # Windows
-source venv/bin/activate   # macOS/Linux
-pip install -r requirements.txt
-```
+1. **Clone the repository**  
+   ```bash
+   git clone https://github.com/GarminFenix/PANTflaskapi.git
+   cd pollution-routing-flask
+   ```
+
+2. **Create and activate a virtual environment**  
+   ```bash
+   python -m venv venv
+   source venv/bin/activate      # macOS/Linux
+   venv\Scripts\activate         # Windows PowerShell
+   ```
+
+3. **Install Python dependencies**  
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ---
 
 ## Configuration
 
-1. Set environment variables at runtime (see above).  
-2. Ensure your Postgres database is running and PostGIS is enabled:
-   ```sql
-   CREATE EXTENSION postgis;
+This project reads sensitive settings from environment variables. They can also be set in the shell or via a `.env` file.
+
+### A. Shell (runtime)
+
+```bash
+export DATABASE_URL="postgresql://<USERNAME>:<PASSWORD>@<HOST>:<PORT>/<DB_NAME>"
+export ORS_API_KEY="your-openrouteservice-api-key"
+flask run
+```
+
+_On Windows PowerShell:_
+
+```powershell
+$env:DATABASE_URL = "postgresql://<USERNAME>:<PASSWORD>@<HOST>:<PORT>/<DB_NAME>"
+$env:ORS_API_KEY   = "your-openrouteservice-api-key"
+flask run
+```
+
+### B. `.env` file with `python-dotenv`
+
+1. Install `python-dotenv`  
+   ```bash
+   pip install python-dotenv
    ```
+2. Create a `.env` file at project root:
+   ```ini
+   DATABASE_URL=postgresql://<USERNAME>:<PASSWORD>@<HOST>:<PORT>/<DB_NAME>
+   ORS_API_KEY=your-openrouteservice-api-key
+   ```
+3. At the top of `app.py`, add:
+   ```python
+   from dotenv import load_dotenv
+   load_dotenv()
+   ```
+
 
 ---
 
 ## Running the Service
 
+Once configured, simply run:
+
 ```bash
 flask run
 ```
 
-By default it listens on `http://127.0.0.1:5000`.  
-Use `FLASK_ENV=development` for auto-reload.
+By default, the API listens on `http://127.0.0.1:5000`.  
+Use `FLASK_ENV=development` to enable auto-reload.
 
 ---
 
 ## API Endpoints
 
 - **GET /heatmap/latest_readings**  
-  Returns most recent pollution readings per site.
+  Returns an array of latest pollution readings per site.
 
 - **GET /sites**  
-  Returns all site locations as GeoJSON FeatureCollection.
+  Returns all monitoring sites as a GeoJSON FeatureCollection.
 
 - **POST /routing/route**  
-  Body: `{ start, end, mode, pollutant }`  
-  Returns cleanest route GeoJSON enriched with pollution scores.
-
-- **/pollutiondata**  
-  - **POST /subscribe** – register callback URL  
-  - **GET/POST /simtime** – view or set simulation clock  
-  - **GET /?timestamp&site** – retrieve pollution data for one site  
-  - **GET /sitemetadata** – all static site coords
+  Request body:
+  ```json
+  {
+    "start": [lon, lat],
+    "end":   [lon, lat],
+    "mode":  "foot-walking" | "cycling-regular",
+    "pollutant": "co" | "no" | "no2" | "noise" | "aqi"
+  }
+  ```
+  Returns the cleanest route GeoJSON with `pollution_scores` and `average_pollution_score`.
 
 ---
 
-## Running Tests
+## Testing
 
-Unit and integration tests use `pytest` and `unittest`.
+- **pytest**  
+  ```bash
+  pytest
+  ```
 
-```bash
-pytest                # runs all pytest tests
-python -m unittest    # runs built-in suites
-```
+- **unittest**  
+  ```bash
+  python -m unittest discover
+  ```
 
-Ensure `DATABASE_URL` points to a test database when running DB-backed tests.
+Ensure DATABASE_URL points to the same PostgreSQL/PostGIS database used by the Spring service, so Flask can access the pollution data it needs for routing and heatmap endpoints.
+
 
 ---
 
 ## Project Structure
 
 ```
-├─ app.py                  # Flask app initialization
-├─ extensions.py           # SQLAlchemy setup
-├─ layers/                 # Blueprints (heatmap, sites, routing)
-├─ models/                 # SQLAlchemy models
-├─ utils/                  # AQI and enrichment logic
-├─ data/                   # Generated JSON for pollution simulation
-├─ tests/                  # Unit & integration tests
-└─ requirements.txt        # Python dependencies
+.
+├── app.py                  # Flask app initialization & blueprint registration
+├── extensions.py           # SQLAlchemy setup
+├── layers/                 # Blueprints
+│   ├── heat_map.py
+│   ├── site_location.py
+│   └── routing.py
+├── models/                 # SQLAlchemy models
+│   ├── site.py
+│   └── pollution_reading.py
+├── utils/                  # AQI & route enrichment logic
+│   ├── pollution/aqi.py
+│   └── routes/enrichment.py
+├── tests/                  # Unit & integration tests
+│   ├── test_heatmap.py
+│   ├── test_sites.py
+│   ├── test_routing.py
+│   └── test_utils_aqi.py
+└── requirements.txt        # Python dependencies
 ```
 
 ---
