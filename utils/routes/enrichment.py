@@ -1,5 +1,6 @@
 """
 Provides functionality to enrich a route GeoJSON with pollution data.
+Author: Ross Cochrane
 """
 
 from sqlalchemy.orm import joinedload

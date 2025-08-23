@@ -1,3 +1,9 @@
+"""
+Module to test the aqi logic.
+Author: Ross Cochrane
+"""
+
+
 import sys
 import os
 

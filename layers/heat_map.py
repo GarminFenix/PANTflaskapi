@@ -2,6 +2,7 @@
 This module defines a Flask Blueprint for the `/heatmap` endpoint.
 It provides a route to retrieve the latest pollution readings from each site.
 The data is fetched using SQLAlchemy ORM, joining pollution readings with site metadata.
+Author: Ross Cochrane
 """
 
 

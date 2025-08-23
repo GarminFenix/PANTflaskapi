@@ -2,6 +2,14 @@
 
 A Flask web service powering the Pollution Avoidance Navigation Tool.  
 It exposes live pollution data, site metadata, and pollution-aware routing endpoints backed by OpenRouteService.
+Developed by Ross Cochrane as part of a submission for MSc Software Development
+dissertation.
+Part of Pollution Avoidance Navigation Tool (PANT):
+Flask Pollution Data Generation Web Service
+Spring API 
+Flask API (This)
+Flutter Front End
+
 
 ---
 

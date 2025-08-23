@@ -1,5 +1,6 @@
 """
 Defines the pollution reading model.
+Author: Ross Cochrane
 """
 
 from extensions import db

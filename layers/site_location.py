@@ -1,6 +1,7 @@
 """
 This module defines a Flask blueprint for site related endpoints.
 Provides a route to retrieve all monitoring sites from the db.
+Author: Ross Cochrane
 """
 
 from flask import Blueprint, jsonify
