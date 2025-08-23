@@ -79,6 +79,13 @@ flask run
    pip install python-dotenv
    ```
 2. Create a `.env` file at project root:
+  ```bash
+  New-Item -Path . -Name ".env" -ItemType "file"
+  ```
+  ```bash
+  code .env
+  ```
+
    ```ini
    DATABASE_URL=postgresql://<USERNAME>:<PASSWORD>@<HOST>:<PORT>/<DB_NAME>
    ORS_API_KEY=your-openrouteservice-api-key
