@@ -1,3 +1,10 @@
+"""
+This module defines a Flask Blueprint for the `/heatmap` endpoint.
+It provides a route to retrieve the latest pollution readings from each site.
+The data is fetched using SQLAlchemy ORM, joining pollution readings with site metadata.
+"""
+
+
 from flask import Blueprint, jsonify
 from sqlalchemy.orm import aliased
 from sqlalchemy import func, and_
@@ -12,12 +19,18 @@ def get_latest_readings():
     """
     Retrieves the latest pollution from each site.
     """
+
+    # Subquery to get the latest timestamp for each system_code_number
+
     subquery = db.session.query(
         PollutionReading.system_code_number,
         func.max(PollutionReading.last_updated).label('latest')
     ).group_by(PollutionReading.system_code_number).subquery()
 
     ReadingAlias = aliased(PollutionReading)
+
+
+    # Main query to fetch site info and corresponding latest pollution readings
 
     results = db.session.query(
         Site.system_code_number,
@@ -39,6 +52,9 @@ def get_latest_readings():
         )
     ).all()
 
+
+    # Format the results
+    
     response = []
     for row in results:
         response.append({

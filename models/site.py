@@ -1,3 +1,7 @@
+"""
+Defines th site model.
+"""
+
 from extensions import db
 from geoalchemy2 import Geometry
 

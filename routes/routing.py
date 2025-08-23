@@ -1,6 +1,13 @@
+"""
+Provides a Flask Blueprint for generating and evaluating routes based on pollution data.
+Uses OpenRouteService to generate a base route and three alternatives by inserting offset waypoints.
+Each route is enriched with pollution metrics, and the cleanest route is returned as GeoJSON.
+"""
+
 from flask import Blueprint, request, jsonify
 import openrouteservice
 import math
+import os
 
 from utils.pollution.aqi import compute_aqi
 from utils.routes.enrichment import enrich_route_with_pollution
@@ -29,7 +36,11 @@ def generate_route():
         return [coord[0] + dx, coord[1] + dy]
 
     # Initialize ORS client
-    client = openrouteservice.Client(key='eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImI3MDVjODMxNDkyNzQ4NDE5MjBhNWQ0YmEyNTUxNmNlIiwiaCI6Im11cm11cjY0In0=')
+    ors_key = os.getenv('ORS_API_KEY')
+    if not ors_key:
+        print("Error: ORS_API_KEY environment not set.")
+        
+    client = openrouteservice.Client(key=os.getenv('ORS_API_KEY'))
 
     enriched_routes = []
 

@@ -1,3 +1,7 @@
+"""
+Defines the pollution reading model.
+"""
+
 from extensions import db
 
 class PollutionReading(db.Model):
