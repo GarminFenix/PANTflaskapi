@@ -1,3 +1,7 @@
+"""
+Provides functionality to enrich a route GeoJSON with pollution data.
+"""
+
 from sqlalchemy.orm import joinedload
 from geoalchemy2.functions import ST_Point, ST_DWithin, ST_SetSRID
 from models.pollution_reading import PollutionReading

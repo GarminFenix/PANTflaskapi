@@ -1,3 +1,7 @@
+"""
+Tests the db connection.
+"""
+
 from app import app, db
 from models.site import Site
 
