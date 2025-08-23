@@ -90,14 +90,6 @@ flask run
    DATABASE_URL=postgresql://<USERNAME>:<PASSWORD>@<HOST>:<PORT>/<DB_NAME>
    ORS_API_KEY=your-openrouteservice-api-key
    ```
-3. At the top of `app.py`, add:
-   ```python
-   from dotenv import load_dotenv
-   load_dotenv()
-   ```
-
-
----
 
 ## Running the Service
 
