@@ -5,10 +5,10 @@ It exposes live pollution data, site metadata, and pollution-aware routing endpo
 Developed by Ross Cochrane as part of a submission for MSc Software Development
 dissertation.
 Part of Pollution Avoidance Navigation Tool (PANT):
-Flask Pollution Data Generation Web Service
-Spring API 
-Flask API (This)
-Flutter Front End
+Flask Pollution Data Generation Web Service,
+Spring API, 
+Flask API (This),
+Flutter Front End.
 
 
 ---
